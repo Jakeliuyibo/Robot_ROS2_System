@@ -4,13 +4,15 @@
 
 class ActionClient : public rclcpp::Node
 {
+    using action_type = demo_interface::action::Progress;
+
     public:
         ActionClient(std::string name) : Node(name)
         {
             RCLCPP_INFO(this->get_logger(), "Action Client is running.");
 
             /* 创建客户端 */
-            p_client = rclcpp_action::create_client<demo_interface::action::Progress>(
+            p_client = rclcpp_action::create_client<action_type>(
                 this,
                 "get_sum"
             );
@@ -23,8 +25,8 @@ class ActionClient : public rclcpp::Node
             }
 
             /* 发送消息 */
-            demo_interface::action::Progress::Goal goal;
-            rclcpp_action::Client<demo_interface::action::Progress>::SendGoalOptions goal_opt;
+            action_type::Goal goal;
+            rclcpp_action::Client<action_type>::SendGoalOptions goal_opt;
             goal.num = 10;
             goal_opt.goal_response_callback = std::bind(&ActionClient::goal_response_handle, this, std::placeholders::_1);
             goal_opt.feedback_callback      = std::bind(&ActionClient::feedback_handle, this, std::placeholders::_1, std::placeholders::_2);
@@ -38,7 +40,9 @@ class ActionClient : public rclcpp::Node
     
     private:
 
-        void goal_response_handle(rclcpp_action::ClientGoalHandle<demo_interface::action::Progress>::SharedPtr goal_handle)
+        void goal_response_handle(
+            rclcpp_action::ClientGoalHandle<action_type>::SharedPtr goal_handle
+            )
         {
             if (!goal_handle)
             {
@@ -51,8 +55,8 @@ class ActionClient : public rclcpp::Node
         }
 
         void feedback_handle(
-            rclcpp_action::ClientGoalHandle<demo_interface::action::Progress>::SharedPtr goal_handle,
-            const std::shared_ptr<const demo_interface::action::Progress::Feedback> feed_back
+            rclcpp_action::ClientGoalHandle<action_type>::SharedPtr goal_handle,
+            const std::shared_ptr<const action_type::Feedback> feed_back
             )
         {
             (void) goal_handle;
@@ -62,7 +66,7 @@ class ActionClient : public rclcpp::Node
         }
 
         void result_handle(
-            const rclcpp_action::ClientGoalHandle<demo_interface::action::Progress>::WrappedResult &result
+            const rclcpp_action::ClientGoalHandle<action_type>::WrappedResult &result
             )
         {
             switch(result.code)
@@ -92,7 +96,7 @@ class ActionClient : public rclcpp::Node
         }
 
     private:
-        rclcpp_action::Client<demo_interface::action::Progress>::SharedPtr p_client;
+        rclcpp_action::Client<action_type>::SharedPtr p_client;
 };
 
 
