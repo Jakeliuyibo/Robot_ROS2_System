@@ -137,6 +137,9 @@
   ros2 service type <service_name>
   ros2 service call <service_name> <service_type> <service_data>
   # 动作
+  ros2 action list                                                # 查看服务列表
+  ros2 action info <action_name>                                  # 查看服务数据类型
+  ros2 action send_goal <action_name> <action_type> <action_data> # 发送服务请求
   ```
 ## 工程目录
 
