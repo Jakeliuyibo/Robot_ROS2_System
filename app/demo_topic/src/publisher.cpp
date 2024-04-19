@@ -1,5 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "demo_interface/msg/person_info.hpp"
 
 class Publisher : public rclcpp::Node
 {
@@ -9,7 +10,7 @@ class Publisher : public rclcpp::Node
             RCLCPP_INFO(this->get_logger(), "Publisher is running.");
 
             /* 1、创建发布者 */
-            p_pub = this->create_publisher<std_msgs::msg::String>("name", 10);
+            p_pub = this->create_publisher<demo_interface::msg::PersonInfo>("PersonInfo", 10);
 
             /* 2、创建定时器发布消息 */
             p_timer = this->create_wall_timer(std::chrono::milliseconds(1000), std::bind(&Publisher::_send_msg, this));
@@ -23,16 +24,17 @@ class Publisher : public rclcpp::Node
     private:
         void _send_msg()
         {
-            std_msgs::msg::String name;
-            name.data = "hello msg.";
+            demo_interface::msg::PersonInfo info;
+            info.name = "hello msg.";
+            info.age = 18;
 
-            RCLCPP_INFO(this->get_logger(), "Publisher is sendling msg: %s.", name.data.c_str());
+            RCLCPP_INFO(this->get_logger(), "Publisher is sendling msg: %s.", info.name.c_str());
 
-            p_pub->publish(name);
+            p_pub->publish(info);
         }
     
     private:
-        rclcpp::Publisher<std_msgs::msg::String>::SharedPtr p_pub;
+        rclcpp::Publisher<demo_interface::msg::PersonInfo>::SharedPtr p_pub;
         rclcpp::TimerBase::SharedPtr p_timer;
 };
 

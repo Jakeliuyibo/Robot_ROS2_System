@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(demo_topic)
+project(demo_server_client)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -9,7 +9,12 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(demo_interface REQUIRED)
+find_package(demo_interface)
+find_package(rosidl_default_generators REQUIRED)
+
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -25,23 +30,23 @@ endif()
 
 ament_package()
 
-add_executable(publisher src/publisher.cpp)
+add_executable(server src/server.cpp)
 ament_target_dependencies(
-	publisher
+	server
 	rclcpp
 	std_msgs
   demo_interface
 )
-add_executable(subscriber src/subscriber.cpp)
+add_executable(client src/client.cpp)
 ament_target_dependencies(
-	subscriber
+	client
 	rclcpp
 	std_msgs
   demo_interface
 )
 
 install(TARGETS
-	publisher
-	subscriber
+  server
+  client
 	DESTINATION lib/${PROJECT_NAME}
 )

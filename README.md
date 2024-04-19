@@ -122,13 +122,22 @@
   colcon build
   source install/setup.bash
   ```
-* 运行节点
+* 常用命令
   ```
+  # 节点
   ros2 run demo_node node_01
   ros2 node list
   ros2 node info <node_name>
+  # 话题
+  ros2 topic list
+  # 接口
+  ros2 interface show <pkg_path>/<if_name>
+  # 服务
+  ros2 service list
+  ros2 service type <service_name>
+  ros2 service call <service_name> <service_type> <service_data>
+  # 动作
   ```
-
 ## 工程目录
 
 ```
